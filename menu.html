@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panther Pizza Shop — Menu</title>
+  <link rel="stylesheet" href="stylesheet.css" />
+</head>
+<body>
+  <header class="menu-header">
+    <h1>Menu</h1>
+    <p class="subhead">Build your order below</p>
+  </header>
+
+  <!-- SECTION 1: PIZZA -->
+  <section class="menu-section" id="section-pizza">
+    <h2>Pizza</h2>
+    <form id="form-pizza">
+      <fieldset>
+        <legend>Size</legend>
+        <label><input type="radio" name="size" value="Small ($9.99)" required> Small — $9.99</label>
+        <label><input type="radio" name="size" value="Medium ($12.99)"> Medium — $12.99</label>
+        <label><input type="radio" name="size" value="Large ($15.99)"> Large — $15.99</label>
+        <label><input type="radio" name="size" value="XL ($18.99)"> XL — $18.99</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Toppings (choose as many as you like)</legend>
+        <div class="grid toppings">
+          <label><input type="checkbox" name="toppings" value="Pepperoni"> Pepperoni</label>
+          <label><input type="checkbox" name="toppings" value="Sausage"> Sausage</label>
+          <label><input type="checkbox" name="toppings" value="Mushrooms"> Mushrooms</label>
+          <label><input type="checkbox" name="toppings" value="Onions"> Onions</label>
+          <label><input type="checkbox" name="toppings" value="Green Peppers"> Green Peppers</label>
+          <label><input type="checkbox" name="toppings" value="Black Olives"> Black Olives</label>
+          <label><input type="checkbox" name="toppings" value="Bacon"> Bacon</label>
+          <label><input type="checkbox" name="toppings" value="Extra Cheese"> Extra Cheese</label>
+        </div>
+      </fieldset>
+
+      <div class="actions">
+        <button type="button" class="btn" data-add="pizza">Add to Order</

@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Panther Pizza Shop — Order Online</title>
+  <meta name="description" content="Order Panther Pizza Shop online." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="stylesheet.css" />
+  <style>
+    /* Page-specific minimal layout (keeps your main stylesheet untouched) */
+    .order-wrap{width:min(1100px,92%);margin:16px auto 0;display:grid;gap:18px}
+    @media (min-width: 980px){.order-wrap{grid-template-columns:1fr 340px}}
+    .panel{background:#1b1b1b;border:2px solid #3a3a3a;border-radius:14px;padding:18px;text-align:left}
+    .panel h2{margin:0 0 10px;font-size:1.4rem}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .row.full{grid-template-columns:1fr}
+    .field{display:flex;flex-direction:column;gap:6px}
+    label{font-weight:600}
+    select, input[type="number"], input[type="text"], textarea{background:#0f0f0f;color:#fff;border:1px solid #3a3a3a;border-radius:10px;padding:10px}
+    textarea{min-height:70px}
+    .pill-list{display:flex;flex-wrap:wrap;gap:8px}
+    .pill{border:1px solid #3a3a3a;padding:6px 10px;border-radius:999px;cursor:pointer;user-select:none}
+    .pill input{display:none}
+    .pill.active{border-color:#ff6347;box-shadow:0 0 0 2px rgba(255,99,71,.2) inset}
+
+    .action{display:flex;gap:10px;align-items:center}
+    .btn{background:#ff6347;border:none;color:#fff;font-weight:700;padding:10px 14px;border-radius:10px;cursor:pointer}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+    .ghost{background:transparent;border:1px solid #3a3a3a}
+
+    /* Cart */
+    .cart{position:sticky;top:12px}
+    .cart-empty{color:#b9b9b9}
+    .cart-items{display:flex;flex-direction:column;gap:10px;margin:10px 0}
+    .cart-item{display:flex;justify-content:space-between;gap:10px;border:1px solid #2a2a2a;border-radius:10px;padding:10px}
+    .cart-item .meta{color:#b9b9b9;font-size:.95rem}
+    .cart-item .remove{background:transparent;border:1px solid #3a3a3a;color:#fff;border-radius:8px;padding:6px 8px;cursor:pointer}
+    .totals{display:flex;flex-direction:column;gap:6px;border-top:1px dashed #3a3a3a;padding-top:10px}
+    .totals div{display:flex;justify-content:space-between}
+    .checkout{display:block;text-align:center;margin-top:12px;text-decoration:none}
+    .checkout[aria-disabled="true"]{pointer-events:none;opacity:.5}
+  </style>
+</head>
+<body>
+  <div class="container" role="application">
+    <header>
+      <a class="brand" href="index.html" aria-label="Pizza Shop Home">
+        <div class="brand-logo"><img src="panther.png" alt="Panther Pizza Logo"></div>
+        <div>
+          <h1>Panther Pizza Shop</h1>
+          <div class="tag">Hand-tossed • Wood-fired • Since 2025</div>
+        </div>
+      </a>
+    </header>
+
+    <section class="hero" aria-labelledby="order-title">
+      <h2 id="order-title">Order Online</h2>
+      <p>Build your order below. Items will appear in your cart on the right.</p>
+
+      <div class="order-wrap">
+        <!-- LEFT: builders -->
+        <div class="panel" aria-labelledby="pizza-builder">
+          <h2 id="pizza-builder">🍕 Build a Pizza</h2>
+          <div class="row">
+            <div class="field">
+              <label for="size">Size</label>
+              <select id="size">
+                <option value="S">Small — 10"</option>
+                <option value="M" selected>Medium — 12"</option>
+                <option value="L">Large — 14"</option>
+                <option value="XL">X-Large — 16"</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="qty-pizza">Quantity</label>
+              <input id="qty-pizza" type="number" min="1" step="1" value="1">
+            </div>
+          </div>
+          <div class="row full">
+            <div class="field">
+              <label>Toppings</label>
+              <div class="pill-list" id="toppings"></div>
+            </div>
+          </div>
+          <div class="action">
+            <button class="btn" id="add-pizza">Add Pizza to Cart</button>
+            <button class="btn ghost" id="clear-toppings" type="button">Clear Toppings</button>
+          </div>
+        </div>
+
+        <div class="panel" aria-labelledby="sub-builder">
+          <h2 id="sub-builder">🥖 Italian Subs</h2>
+          <div class="row">
+            <div class="field">
+              <label for="sub-type">Choose Sub</label>
+              <select id="sub-type">
+                <option value="Italian">Italian</option>
+                <option value="Meatball Parm">Meatball Parm</option>
+                <option value="Chicken Parm">Chicken Parm</option>
+                <option value="Veggie">Veggie</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="qty-sub">Quantity</label>
+              <input id="qty-sub" type="number" min="1" step="1" value="1">
+            </div>
+          </div>
+          <div class="action">
+            <button class="btn" id="add-sub">Add Sub to Cart</button>
+          </div>
+        </div>
+
+        <div class="panel" aria-labelledby="wings-builder">
+          <h2 id="wings-builder">🍗 Wings</h2>
+          <div class="row">
+            <div class="field">
+              <label for="wings-size">Size</label>
+              <select id="wings-size">
+                <option value="6">6 Wings</option>
+                <option value="12">12 Wings</option>
+                <option value="24">24 Wings</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="qty-wings">Quantity</label>
+              <input id="qty-wings" type="number" min="1" step="1" value="1">
+            </div>
+          </div>
+          <div class="row full">
+            <div class="field">
+              <label>Sauces (pick up to 3)</label>
+              <div class="pill-list" id="sauces"></div>
+            </div>
+          </div>
+          <div class="action">
+            <button class="btn" id="add-wings">Add Wings to Cart</button>
+            <button class="btn ghost" id="clear-sauces" type="button">Clear Sauces</button>
+          </div>
+        </div>
+
+        <div class="panel" aria-labelledby="sides-builder">
+          <h2 id="sides-builder">🧀 Sides</h2>
+          <div class="row">
+            <div class="field">
+              <label for="side-type">Choose Side</label>
+              <select id="side-type">
+                <option value="Garlic Bread">Garlic Bread</option>
+                <option value="Cheesy Bread">Cheesy Bread</option>
+                <option value="Meatballs (3)">Meatballs (3)</option>
+                <option value="Side Salad">Side Salad</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="qty-side">Quantity</label>
+              <input id="qty-side" type="number" min="1" step="1" value="1">
+            </div>
+          </div>
+          <div class="action">
+            <button class="btn" id="add-side">Add Side to Cart</button>
+          </div>
+        </div>
+
+        <div class="panel" aria-labelledby="notes">
+          <h2 id="notes">📝 Order Notes</h2>
+          <div class="row full">
+            <div class="field">
+              <label for="notes-text">Allergies, substitutions, delivery notes, etc.</label>
+              <textarea id="notes-text" placeholder="Example: no onions on the sub; light sauce on the large pizza"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: cart -->
+        <aside class="panel cart" aria-labelledby="cart-title">
+          <h2 id="cart-title">🛒 Your Cart</h2>
+          <div id="cart-empty" class="cart-empty">Your cart is empty.</div>
+          <div id="cart-items" class="cart-items" hidden></div>
+          <div class="totals">
+            <div><span>Subtotal</span><strong id="subtotal">$0.00</strong></div>
+            <div><span>Tax (6%)</span><strong id="tax">$0.00</strong></div>
+            <div><span>Total</span><strong id="total">$0.00</strong></div>
+          </div>
+          <div class="action" style="margin-top:10px">
+            <button class="btn ghost" id="clear-cart" type="button">Clear Cart</button>
+            <a class="btn checkout" id="checkout" href="checkout.html" aria-disabled="true">Proceed to Checkout →</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <footer>
+      <span>📍 123 Main St • Ellwood City, PA • (724) 555-5555 • Open daily 11am–10pm</span>
+    </footer>
+  </div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
